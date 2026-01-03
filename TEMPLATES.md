@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace App\LeetCode\[CATEGORY];
 
+use App\LeetCode\BaseSolvedProblemsInterface;
+use App\LeetCode\ResolutionResponse;
+
 /**
  * LeetCode Problem [NUMBER]: [TITLE]
  * 
@@ -33,13 +36,21 @@ namespace App\LeetCode\[CATEGORY];
  * Time Complexity: O(?) - [EXPLANATION]
  * Space Complexity: O(?) - [EXPLANATION]
  */
-class [PROBLEM_NAME]
+class [PROBLEM_NAME] implements BaseSolvedProblemsInterface
 {
+    public function solve(array &$params): ResolutionResponse
+    {
+        return new ResolutionResponse(
+            result: $this->solveProblem($params['param1'], $params['param2'])
+        );
+    }
+
     /**
-     * @param [TYPE] $[PARAM_NAME]
+     * @param [TYPE] $param1
+     * @param [TYPE] $param2
      * @return [TYPE]
      */
-    public function solve([PARAMETERS]): [RETURN_TYPE]
+    private function solveProblem($param1, $param2)
     {
         // Implementation
     }
@@ -51,8 +62,6 @@ class [PROBLEM_NAME]
 ```php
 <?php
 
-declare(strict_types=1);
-
 namespace Tests\LeetCode\[CATEGORY];
 
 use App\LeetCode\[CATEGORY]\[PROBLEM_NAME];
@@ -62,22 +71,22 @@ class [PROBLEM_NAME]Test extends TestCase
 {
     private [PROBLEM_NAME] $solution;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
+        parent::setUp();
         $this->solution = new [PROBLEM_NAME]();
     }
 
     public function testExample1(): void
     {
-        // Arrange
-        $input = [INPUT];
-        $expected = [EXPECTED];
+        $params = [
+            'param1' => [VALUE1],
+            'param2' => [VALUE2],
+        ];
 
-        // Act
-        $result = $this->solution->solve($input);
+        $resolutionResponse = $this->solution->solve($params);
 
-        // Assert
-        $this->assertEquals($expected, $result);
+        $this->assertEquals([EXPECTED], $resolutionResponse->result);
     }
 
     public function testExample2(): void
@@ -89,53 +98,53 @@ class [PROBLEM_NAME]Test extends TestCase
 
 ## Common Type Hints
 
-### Basic Types
+### Basic Types (for helper methods)
 ```php
-public function solve(int $n): int
-public function solve(float $x): float
-public function solve(string $s): string
-public function solve(bool $flag): bool
+private function helperMethod(int $n): int
+private function helperMethod(float $x): float
+private function helperMethod(string $s): string
+private function helperMethod(bool $flag): bool
 ```
 
-### Arrays
+### Arrays (for helper methods)
 ```php
 // Integer array
 /**
  * @param array<int> $nums
  * @return array<int>
  */
-public function solve(array $nums): array
+private function helperMethod(array $nums): array
 
 // String array
 /**
  * @param array<string> $words
  * @return array<string>
  */
-public function solve(array $words): array
+private function helperMethod(array $words): array
 
 // Mixed array
 /**
  * @param array<int|string> $items
  * @return array<int, mixed>
  */
-public function solve(array $items): array
+private function helperMethod(array $items): array
 
 // 2D array
 /**
  * @param array<array<int>> $matrix
  * @return array<array<int>>
  */
-public function solve(array $matrix): array
+private function helperMethod(array $matrix): array
 ```
 
-### Multiple Parameters
+### Multiple Parameters (for helper methods)
 ```php
 /**
  * @param array<int> $nums
  * @param int $target
  * @return array<int>
  */
-public function solve(array $nums, int $target): array
+private function helperMethod(array $nums, int $target): array
 ```
 
 ### Reference Parameters (for in-place modifications)
@@ -144,7 +153,7 @@ public function solve(array $nums, int $target): array
  * @param array<int> $nums
  * @return array<int>
  */
-public function solve(array &$nums): array
+private function helperMethod(array &$nums): array
 ```
 
 ## Common Complexity Patterns

@@ -7,12 +7,14 @@ Thank you for contributing to the Top 150 LeetCode Solutions repository! This gu
 ### Code Requirements
 
 1. **PHP 8.3**: All code must be compatible with PHP 8.3+
-2. **Strict Types**: Every PHP file must start with `declare(strict_types=1);`
-3. **Full Type Hints**: All parameters and return types must be fully typed
-4. **Single Method**: Each problem class has exactly one public method named `solve`
-5. **Documentation**: Include problem number, description, and complexity analysis
-6. **SOLID Principles**: Follow clean code and SOLID design patterns
-7. **No Web Layer**: This is a pure algorithm repository - no controllers, routes, views, or APIs
+2. **Strict Types**: Every problem class must start with `declare(strict_types=1);`
+3. **Interface Implementation**: All problem classes must implement `BaseSolvedProblemsInterface`
+4. **Method Signature**: The public method must be `solve(array &$params): ResolutionResponse`
+5. **Response Wrapping**: Return results wrapped in a `ResolutionResponse` object using `new ResolutionResponse(result: $value)`
+6. **Helper Methods**: Create private helper methods for the actual algorithm implementation with proper type hints
+7. **Documentation**: Include problem number, description, and complexity analysis in docblocks
+8. **SOLID Principles**: Follow clean code and SOLID design patterns
+9. **No Web Layer**: This is a pure algorithm repository - no controllers, routes, views, or APIs
 
 ## Adding a New Problem
 
@@ -49,6 +51,9 @@ declare(strict_types=1);
 
 namespace App\LeetCode\<Category>;
 
+use App\LeetCode\BaseSolvedProblemsInterface;
+use App\LeetCode\ResolutionResponse;
+
 /**
  * LeetCode Problem <Number>: <Title>
  * 
@@ -66,13 +71,21 @@ namespace App\LeetCode\<Category>;
  * Time Complexity: O(?) - <explanation>
  * Space Complexity: O(?) - <explanation>
  */
-class <ProblemName>
+class <ProblemName> implements BaseSolvedProblemsInterface
 {
+    public function solve(array &$params): ResolutionResponse
+    {
+        return new ResolutionResponse(
+            result: $this->solveProblem($params['param1'], $params['param2'])
+        );
+    }
+
     /**
-     * @param <type> $param
+     * @param <type> $param1
+     * @param <type> $param2
      * @return <type>
      */
-    public function solve(<fully typed parameters>): <return type>
+    private function solveProblem($param1, $param2)
     {
         // Your implementation here
     }
@@ -83,20 +96,10 @@ class <ProblemName>
 - Use PascalCase for class names
 - Be descriptive: `ValidPalindrome`, `MergeSortedArray`, `MaximumSubarray`
 
-**Type Hints:**
-```php
-// Good examples
-public function solve(int $target, array $nums): int
-public function solve(string $s): bool
-public function solve(array $nums): array
-
-// Use PHPDoc for complex array types
-/**
- * @param array<int> $nums
- * @param array<string> $words
- * @return array<int, string>
- */
-```
+**Parameter Pattern:**
+- The `solve()` method receives an associative array of parameters
+- Extract parameters and call a private helper method with proper types
+- Return the result wrapped in a `ResolutionResponse`
 
 ### Step 3: Create the Test Class
 
@@ -104,8 +107,6 @@ Create a file in `tests/LeetCode/<Category>/<ProblemName>Test.php`:
 
 ```php
 <?php
-
-declare(strict_types=1);
 
 namespace Tests\LeetCode\<Category>;
 
@@ -116,20 +117,22 @@ class <ProblemName>Test extends TestCase
 {
     private <ProblemName> $solution;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
+        parent::setUp();
         $this->solution = new <ProblemName>();
     }
 
     public function testExample1(): void
     {
-        // Test the first example from LeetCode
-        $input = ...; // Set up input
-        $expected = ...; // Expected output
-        
-        $result = $this->solution->solve($input);
-        
-        $this->assertEquals($expected, $result);
+        $params = [
+            'param1' => $value1,
+            'param2' => $value2,
+        ];
+
+        $resolutionResponse = $this->solution->solve($params);
+
+        $this->assertEquals($expected, $resolutionResponse->result);
     }
 
     public function testExample2(): void
@@ -156,6 +159,8 @@ class <ProblemName>Test extends TestCase
 
 **Test Guidelines:**
 - Test all examples provided in the LeetCode problem
+- Pass parameters as an associative array to `solve()`
+- Access the result via `$resolutionResponse->result`
 - Test edge cases (empty, single element, maximum constraints, etc.)
 - Test boundary conditions
 - Use descriptive test method names
@@ -177,11 +182,14 @@ vendor/bin/phpunit tests/LeetCode/<Category>/<ProblemName>Test.php
 ### Step 5: Verify Code Quality
 
 Ensure your code:
-- [ ] Uses `declare(strict_types=1)` at the top
-- [ ] Has all parameters and return types fully typed
-- [ ] Includes complete PHPDoc for complex types
-- [ ] Has problem description and complexity analysis
-- [ ] Has comprehensive test coverage
+- [ ] Uses `declare(strict_types=1)` at the top of problem classes
+- [ ] Implements `BaseSolvedProblemsInterface`
+- [ ] Has the correct `solve(array &$params): ResolutionResponse` signature
+- [ ] Returns results wrapped in `ResolutionResponse`
+- [ ] Uses private helper methods with proper type hints
+- [ ] Includes complete PHPDoc for complex types in helper methods
+- [ ] Has problem description and complexity analysis in docblocks
+- [ ] Has comprehensive test coverage using the params array pattern
 - [ ] Passes all tests
 - [ ] Follows PHP PSR-12 coding standards
 - [ ] Has no unnecessary comments (code should be self-documenting)
@@ -196,6 +204,9 @@ Ensure your code:
 declare(strict_types=1);
 
 namespace App\LeetCode\Array;
+
+use App\LeetCode\BaseSolvedProblemsInterface;
+use App\LeetCode\ResolutionResponse;
 
 /**
  * LeetCode Problem 1: Two Sum
@@ -214,14 +225,21 @@ namespace App\LeetCode\Array;
  * Time Complexity: O(n) - Single pass through the array
  * Space Complexity: O(n) - Hash map to store seen numbers
  */
-class TwoSum
+class TwoSum implements BaseSolvedProblemsInterface
 {
+    public function solve(array &$params): ResolutionResponse
+    {
+        return new ResolutionResponse(
+            result: $this->twoSum($params['nums'], $params['target'])
+        );
+    }
+
     /**
      * @param array<int> $nums
      * @param int $target
      * @return array<int>
      */
-    public function solve(array $nums, int $target): array
+    private function twoSum(array $nums, int $target): array
     {
         $map = [];
         
@@ -245,8 +263,6 @@ class TwoSum
 ```php
 <?php
 
-declare(strict_types=1);
-
 namespace Tests\LeetCode\Array;
 
 use App\LeetCode\Array\TwoSum;
@@ -256,64 +272,70 @@ class TwoSumTest extends TestCase
 {
     private TwoSum $solution;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
+        parent::setUp();
         $this->solution = new TwoSum();
     }
 
     public function testExample1(): void
     {
-        $nums = [2, 7, 11, 15];
-        $target = 9;
-        $expected = [0, 1];
+        $params = [
+            'nums' => [2, 7, 11, 15],
+            'target' => 9,
+        ];
 
-        $result = $this->solution->solve($nums, $target);
+        $resolutionResponse = $this->solution->solve($params);
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals([0, 1], $resolutionResponse->result);
     }
 
     public function testExample2(): void
     {
-        $nums = [3, 2, 4];
-        $target = 6;
-        $expected = [1, 2];
+        $params = [
+            'nums' => [3, 2, 4],
+            'target' => 6,
+        ];
 
-        $result = $this->solution->solve($nums, $target);
+        $resolutionResponse = $this->solution->solve($params);
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals([1, 2], $resolutionResponse->result);
     }
 
     public function testExample3(): void
     {
-        $nums = [3, 3];
-        $target = 6;
-        $expected = [0, 1];
+        $params = [
+            'nums' => [3, 3],
+            'target' => 6,
+        ];
 
-        $result = $this->solution->solve($nums, $target);
+        $resolutionResponse = $this->solution->solve($params);
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals([0, 1], $resolutionResponse->result);
     }
 
     public function testNegativeNumbers(): void
     {
-        $nums = [-1, -2, -3, -4, -5];
-        $target = -8;
-        $expected = [2, 4];
+        $params = [
+            'nums' => [-1, -2, -3, -4, -5],
+            'target' => -8,
+        ];
 
-        $result = $this->solution->solve($nums, $target);
+        $resolutionResponse = $this->solution->solve($params);
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals([2, 4], $resolutionResponse->result);
     }
 
     public function testZeroTarget(): void
     {
-        $nums = [-3, 0, 3, 90];
-        $target = 0;
-        $expected = [0, 2];
+        $params = [
+            'nums' => [-3, 0, 3, 90],
+            'target' => 0,
+        ];
 
-        $result = $this->solution->solve($nums, $target);
+        $resolutionResponse = $this->solution->solve($params);
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals([0, 2], $resolutionResponse->result);
     }
 }
 ```
@@ -333,10 +355,14 @@ When submitting a pull request:
    - Complexity analysis
 
 3. **Checklist**:
-   - [ ] Code uses strict types
-   - [ ] All types are fully hinted
+   - [ ] Code uses `declare(strict_types=1)`
+   - [ ] Class implements `BaseSolvedProblemsInterface`
+   - [ ] Method signature is `solve(array &$params): ResolutionResponse`
+   - [ ] Result is wrapped in `ResolutionResponse`
+   - [ ] Helper methods have proper type hints
    - [ ] Problem documentation is complete
    - [ ] All tests pass
+   - [ ] Tests use the params array pattern
    - [ ] Edge cases are tested
    - [ ] Code follows SOLID principles
 
