@@ -56,4 +56,9 @@ class MergeSortedArrayTest extends TestCase
 
         $this->assertEquals([1], $params['nums1']);
     }
+
+    public function testCICD(): void
+    {
+        $this->assertTrue(false);
+    }
 }
