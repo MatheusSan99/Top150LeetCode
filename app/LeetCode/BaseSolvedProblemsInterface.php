@@ -2,7 +2,9 @@
 
 namespace App\LeetCode;
 
+use App\LeetCode\ResolutionResponse;
+
 interface BaseSolvedProblemsInterface
 {
-    public function solve(array &$params): void;
+    public function solve(array &$params): ResolutionResponse;
 }
