@@ -31,7 +31,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
-RUN cp php/php.ini-development /usr/local/etc/php/php.ini
+
 
 RUN git config --system --add safe.directory /var/www/html
 
