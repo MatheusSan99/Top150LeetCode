@@ -92,7 +92,7 @@ services:
 If you encounter permission issues:
 
 ```bash
-docker-compose exec app chown -R www-data:www-data /var/www
+docker-compose exec app chown -R www-data:www-data /var/www/html
 ```
 
 ### Composer issues

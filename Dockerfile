@@ -1,35 +1,39 @@
 FROM php:8.3-fpm-alpine
 
-# Install system dependencies
 RUN apk add --no-cache \
+    bash \
     git \
     curl \
+    zip \
+    unzip \
     libpng-dev \
     oniguruma-dev \
     libxml2-dev \
-    zip \
-    unzip
+    gcc \
+    make \
+    autoconf \
+    g++ \
+    linux-headers
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install \
+    pdo_mysql \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd
 
-# Get Composer
+RUN pecl install xdebug \
+ && docker-php-ext-enable xdebug
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
-WORKDIR /var/www
+WORKDIR /var/www/html
+COPY . .
 
-# Copy application files
-COPY . /var/www
+RUN cp php/php.ini-development /usr/local/etc/php/php.ini
 
-# Install dependencies
-RUN composer install --no-interaction --optimize-autoloader --no-dev
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www
-
-USER www-data
+RUN git config --system --add safe.directory /var/www/html
 
 EXPOSE 9000
-
 CMD ["php-fpm"]

@@ -1,18 +1,20 @@
-version: '3.8'
-
 services:
-  app:
+  leetcode:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: leetcode-app
-    restart: unless-stopped
-    working_dir: /var/www
+    container_name: leetcode
+    working_dir: /var/www/html
     volumes:
-      - ./:/var/www
+      - ./:/var/www/html
     networks:
-      - leetcode
+      - leetcode-network
+    ports:
+      - "8080:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    image: leetcode
 
 networks:
-  leetcode:
+  leetcode-network:
     driver: bridge
