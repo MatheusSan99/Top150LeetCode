@@ -93,6 +93,18 @@ Run a specific test:
 docker-compose exec app vendor/bin/phpunit tests/LeetCode/Array/MergeSortedArrayTest.php
 ```
 
+## 🔄 Continuous Integration
+
+This repository uses GitHub Actions to automatically run all tests on pull requests to the `main` branch. This ensures:
+
+- ✅ All code is tested before merging
+- ✅ The main branch always contains working code
+- ✅ No broken tests can be merged
+
+**For contributors**: Make sure to run `composer test` locally before submitting pull requests. The CI will automatically run when you open a PR.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more details on the CI/CD setup and branch protection rules.
+
 ## 📝 Problem Structure
 
 Each problem follows this structure:

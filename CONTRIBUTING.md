@@ -340,6 +340,44 @@ When submitting a pull request:
    - [ ] Edge cases are tested
    - [ ] Code follows SOLID principles
 
+## Continuous Integration (CI/CD)
+
+### Automated Testing
+
+This repository uses GitHub Actions to automatically run all tests on every pull request to the `main` branch. The CI workflow:
+
+1. **Triggers on**: Pull requests and pushes to `main`
+2. **Sets up**: PHP 8.3 environment with required extensions
+3. **Validates**: `composer.json` and `composer.lock` files
+4. **Installs**: All dependencies via Composer
+5. **Runs**: Complete PHPUnit test suite
+
+The workflow is defined in `.github/workflows/tests.yml`.
+
+### Branch Protection (Repository Maintainers)
+
+To enforce that tests must pass before merging, enable branch protection rules:
+
+1. Go to **Settings** → **Branches** in the GitHub repository
+2. Add a branch protection rule for `main`
+3. Enable the following settings:
+   - ✅ **Require status checks to pass before merging**
+   - ✅ **Require branches to be up to date before merging**
+   - Select the **Run PHPUnit Tests** check as required
+   - ✅ **Do not allow bypassing the above settings** (recommended)
+
+With these settings enabled:
+- Pull requests cannot be merged if tests fail
+- All contributors must ensure their code passes tests
+- The main branch always contains working, tested code
+
+### What This Means for Contributors
+
+- **Before submitting a PR**: Run `composer test` locally to ensure all tests pass
+- **After submitting a PR**: Wait for the CI checks to complete
+- **If tests fail**: Review the CI logs, fix the issues, and push new commits
+- **When tests pass**: Your PR is ready for review and can be merged (after approval)
+
 ## Questions?
 
 If you have questions or need clarification:
