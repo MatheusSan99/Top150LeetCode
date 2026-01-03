@@ -84,21 +84,6 @@ class [PROBLEM_NAME]Test extends TestCase
     {
         // Test second example
     }
-
-    public function testEdgeCaseEmpty(): void
-    {
-        // Test empty input
-    }
-
-    public function testEdgeCaseSingleElement(): void
-    {
-        // Test single element
-    }
-
-    public function testEdgeCaseMaxConstraints(): void
-    {
-        // Test maximum constraints
-    }
 }
 ```
 
