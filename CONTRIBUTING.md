@@ -4,8 +4,6 @@ Thank you for contributing to the Top 150 LeetCode Solutions repository! This gu
 
 ## Project Standards
 
-### Project Standards
-
 ### Code Requirements
 
 1. **PHP 8.3**: All code must be compatible with PHP 8.3+
