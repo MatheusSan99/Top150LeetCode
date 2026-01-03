@@ -30,7 +30,7 @@ class RemoveElementTest extends TestCase
     public function testExample2(): void
     {
         $params = [
-            'nums   ' => [0, 1, 2, 2, 3, 0, 4, 2],
+            'nums' => [0, 1, 2, 2, 3, 0, 4, 2],
             'val' => 2,
         ];
 
