@@ -25,9 +25,9 @@ class MergeSortedArrayTest extends TestCase
             'n' => 3
         ];
 
-        $this->solution->solve($params);
+        $resolutionResponse = $this->solution->solve($params);
 
-        $this->assertEquals([1,2,2,3,5,6], $params['nums1']);
+        $this->assertEquals([1,2,2,3,5,6], $resolutionResponse->result);
     }
 
     public function testExample2(): void 
@@ -39,9 +39,9 @@ class MergeSortedArrayTest extends TestCase
             'n' => 0
         ];
 
-        $this->solution->solve($params);
+        $resolutionResponse = $this->solution->solve($params);
 
-        $this->assertEquals([1], $params['nums1']);
+        $this->assertEquals([1], $resolutionResponse->result);
     }
 
     public function testExample3(): void 
@@ -53,8 +53,8 @@ class MergeSortedArrayTest extends TestCase
             'n' => 1
         ];
 
-        $this->solution->solve($params);
+        $resolutionResponse = $this->solution->solve($params);
 
-        $this->assertEquals([1], $params['nums1']);
+        $this->assertEquals([1], $resolutionResponse->result);
     }
 }

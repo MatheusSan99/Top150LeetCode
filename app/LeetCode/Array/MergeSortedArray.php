@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\LeetCode\Array;
 
 use App\LeetCode\BaseSolvedProblemsInterface;
+use App\LeetCode\ResolutionResponse;
 
 class MergeSortedArray implements BaseSolvedProblemsInterface
 {
@@ -36,9 +37,11 @@ class MergeSortedArray implements BaseSolvedProblemsInterface
     // The result of the merge is [1].
     // Note that because m = 0, there are no elements in nums1. The 0 is only there to ensure the merge result can fit in nums1.
 
-    public function solve(array &$params): void
+    public function solve(array &$params): ResolutionResponse
     {
         $this->merge($params['nums1'], $params['m'], $params['nums2'], $params['n']);
+
+        return new ResolutionResponse($params['nums1']);
     }
 
     /**
