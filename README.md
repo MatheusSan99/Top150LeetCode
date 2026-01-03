@@ -4,47 +4,20 @@ A PHP 8.3 + Docker + Laravel repository for solving the LeetCode Top 150 Intervi
 
 ## 🎯 Project Structure
 
-This project follows clean code principles and SOLID design patterns. Each LeetCode problem should be implemented as a single class with one public `solve` method, fully typed with `declare(strict_types=1)`.
+This project follows clean code principles and SOLID design patterns. Each LeetCode problem is implemented as a class that implements `BaseSolvedProblemsInterface` with a public `solve(array &$params): ResolutionResponse` method.
 
 ```
 app/LeetCode/
-├── Array/
-├── TwoPointers/
-├── SlidingWindow/
-├── Stack/
-├── LinkedList/
-├── BinaryTree/
-├── Graph/
-├── Backtracking/
-├── DynamicProgramming/
-├── Greedy/
-├── BinarySearch/
-├── Heap/
-├── BitManipulation/
-├── Math/
-├── Trie/
-├── Intervals/
-└── Kadane/
+├── Array/               # Array manipulation problems (active)
+├── TwoPointers/         # Two-pointer technique problems (planned)
+├── BaseSolvedProblemsInterface.php  # Interface for all problems
+└── ResolutionResponse.php           # Response wrapper class
 
 tests/LeetCode/
-├── Array/
-├── TwoPointers/
-├── SlidingWindow/
-├── Stack/
-├── LinkedList/
-├── BinaryTree/
-├── Graph/
-├── Backtracking/
-├── DynamicProgramming/
-├── Greedy/
-├── BinarySearch/
-├── Heap/
-├── BitManipulation/
-├── Math/
-├── Trie/
-├── Intervals/
-└── Kadane/
+└── Array/               # Array problem tests
 ```
+
+**Note**: Additional categories will be added as problems are implemented. Planned categories include: SlidingWindow, Stack, LinkedList, BinaryTree, Graph, Backtracking, DynamicProgramming, Greedy, BinarySearch, Heap, BitManipulation, Math, Trie, Intervals, and Kadane.
 
 ## 🚀 Getting Started
 
@@ -118,6 +91,9 @@ declare(strict_types=1);
 
 namespace App\LeetCode\<Category>;
 
+use App\LeetCode\BaseSolvedProblemsInterface;
+use App\LeetCode\ResolutionResponse;
+
 /**
  * LeetCode Problem <Number>: <Title>
  * 
@@ -126,9 +102,19 @@ namespace App\LeetCode\<Category>;
  * Time Complexity: O(?)
  * Space Complexity: O(?)
  */
-class <ProblemName>
+class <ProblemName> implements BaseSolvedProblemsInterface
 {
-    public function solve(<typed parameters>): <return type>
+    public function solve(array &$params): ResolutionResponse
+    {
+        return new ResolutionResponse(result: $this->solveProblem($params['param1'], $params['param2']));
+    }
+
+    /**
+     * @param <type> $param1
+     * @param <type> $param2
+     * @return <type>
+     */
+    private function solveProblem($param1, $param2)
     {
         // Implementation
     }
@@ -140,8 +126,6 @@ class <ProblemName>
 ```php
 <?php
 
-declare(strict_types=1);
-
 namespace Tests\LeetCode\<Category>;
 
 use App\LeetCode\<Category>\<ProblemName>;
@@ -151,15 +135,22 @@ class <ProblemName>Test extends TestCase
 {
     private <ProblemName> $solution;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
+        parent::setUp();
         $this->solution = new <ProblemName>();
     }
 
     public function testExample1(): void
     {
-        // Test implementation
-        $this->assertEquals($expected, $this->solution->solve($input));
+        $params = [
+            'param1' => $value1,
+            'param2' => $value2,
+        ];
+
+        $resolutionResponse = $this->solution->solve($params);
+
+        $this->assertEquals($expected, $resolutionResponse->result);
     }
 }
 ```
@@ -186,20 +177,27 @@ class <ProblemName>Test extends TestCase
 
 ## 🎓 Code Guidelines
 
-1. **Strict Types**: All files must use `declare(strict_types=1)`
-2. **Type Hints**: All parameters and return types must be fully typed
-3. **Single Responsibility**: One problem per class, one public method named `solve`
-4. **Documentation**: Include problem description, number, and complexity analysis
-5. **Testing**: One PHPUnit test class per problem with comprehensive test cases
-6. **SOLID Principles**: Follow clean code and SOLID design patterns
-7. **No Web Layer**: No controllers, routes, views, or APIs
+1. **Strict Types**: All problem classes must use `declare(strict_types=1)`
+2. **Interface Implementation**: All problem classes must implement `BaseSolvedProblemsInterface`
+3. **Method Signature**: The public `solve(array &$params): ResolutionResponse` method receives parameters as an associative array
+4. **Response Wrapping**: Return results wrapped in a `ResolutionResponse` object
+5. **Helper Methods**: Use private helper methods for the actual algorithm implementation with proper type hints
+6. **Documentation**: Include problem description, number, and complexity analysis in docblocks
+7. **Testing**: One PHPUnit test class per problem with comprehensive test cases using the params array pattern
+8. **SOLID Principles**: Follow clean code and SOLID design patterns
+9. **No Web Layer**: No controllers, routes, views, or APIs
 
 ## 🔧 Development
 
 ### Adding a New Problem
 
 1. Create the problem class in `app/LeetCode/<Category>/<ProblemName>.php`
+   - Implement `BaseSolvedProblemsInterface`
+   - Use `declare(strict_types=1)` at the top
+   - Implement `solve(array &$params): ResolutionResponse` method
 2. Create the test class in `tests/LeetCode/<Category>/<ProblemName>Test.php`
+   - Pass parameters as an associative array to `solve()`
+   - Assert against `$resolutionResponse->result`
 3. Run tests to verify implementation
 4. Commit with a descriptive message
 
